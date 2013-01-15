@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang='en-US'>
+<head>
+  <meta charset='utf-8' />
+  <title>CSS Layout Fundamentals</title>
+  <link href='css/deck.core.css' rel='stylesheet'  type='text/css' />
+  <link href='css/swiss.css' rel='stylesheet' type='text/css' />
+  <link href='css/horizontal-slide.css' rel='stylesheet' type='text/css' />
+  <style type='text/css'>
+    /* Should all be done from scratch at some point... */
+    .deck-container h1 {
+      font-size: 60%;
+      margin-top: 1.6em;
+      float: right;
+    }
+
+    .deck-container .slide {
+      background: none;
+    }
+
+    code {
+      background: white;
+      padding: 0.5em;
+      white-space: pre-wrap;
+    }
+
+    .figures {
+      text-align: center;
+    }
+
+    .figures figure {
+      text-align: center;
+      display: inline-block;
+    }
+
+    .deck-container figure img {
+      margin: 0;
+    }
+
+    .deck-container figcaption {
+      font-size: 80%;
+      margin: 1.25em 0;
+    }
+  </style>
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+  <script type='text/javascript' src='js/deck.core.js'></script>
+<body class='deck-container'>
+  <h1>CSS Layout Fundamentals</h1>
+
+  <section class='slide' style='width:100%;display:table;height:10em;text-align:center;clear:right;'>
+    <div style='display:table-cell;vertical-align:middle;'>
+      <p class='slide'>CSS Layout Fundamentals</p>
+      <p class='slide'>A Cameron Sampson production</p>
+      <p class='slide'>In partnership with iSeatz</p>
+      <p class='slide'>In conjunction with <a href='http://pizzaclub.org'>pizzaclub</a></p>
+      <p class='slide'>Far over...</p>
+      <p class='slide'>The Misty Mountains cold...</p>
+      <p class='slide'>To dungeons deep...</p>
+      <p class='slide'>And caverns old...</p>
+    </div>
+  </section>
+
+  <section class='slide'>
+    <div class='slide'>
+      <h2>display</h2>
+
+      <p>Changes what kind of <strong>box</strong> a given element generates(cue explaining of boxes)</p>
+    </div>
+
+    <p class='slide'>Values we're concerned with for this presentation are <strong>inline</strong>, <strong>inline-block</strong>, and <strong>block</strong>.
+
+    <h3 class='slide'>Suspiciously simplified definitions:</h3>
+
+    <ul>
+      <li class='slide'><strong>inline</strong> elements stack horizontally.</li>
+      <li class='slide'><strong>inline-block</strong> means the generated box is an inline one, but internally works like a block box(this is awesome).</li>
+      <li class='slide'><strong>block</strong> elements stack vertically.</li>
+    </ul>
+
+    <em class='slide'>But, there are other implications:</em>
+
+    <ul>
+      <li class='slide'>What kind of box generated can affect how property values are calculated(if defined at all), e.g. vertical margins.</li>
+      <li class='slide'>Whitespace characters between inline-block elements are apparent.</li>
+      <li class='slide'>...and some other more advanced stuff I'm not going to cover to move on <strong>LOL</strong></li>
+    </ul>
+  </section>
+
+  <section class='slide'>
+    <h2>float</h2>
+
+    <p class='slide'>Floated elements shift to the left/right edge of their containing block(or next to another floated element).</p>
+
+    <p class='slide'>Things to note:</p>
+    <ul>
+      <li class='slide'>Floated elements are taken out of normal document flow.</li>
+      <li class='slide'>Floated elements generate <strong>block</strong> boxes.</li>
+      <li class='slide'>Content flows alongside a floating element.</li>
+      <li class='slide'>Floated elements will not affect the containing box that's generated unless contained(a feature, not a bug).</li>
+    </ul>
+
+    <div class='figures'>
+      <figure class='slide'>
+        <img src='img/float1.png' alt='' />
+        <figcaption>Float with content flowing around it</figcaption>
+      </figure>
+
+      <figure class='slide'>
+        <img src='img/float2.png' alt='' />
+        <figcaption>Cleared float</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <section class='slide' style='padding-top:3em;'>
+    <img src='img/one_more_thing.png' alt='' />
+  </section>
+
+  <section class='slide'>
+    <h2>float clearing and containment</h2>
+
+    <ul>
+      <li class='slide'>The <strong>clear</strong> property can be used dictate which side of an element can <strong>not</strong> be adjacent to an [earlier] floating box.</li>
+      <li class='slide'>You may instead want to style the parent containing the floating children:
+
+<!-- wamp -->
+<code>
+  .clearfix:after {
+    content: '';
+    display: block;
+    clear: both;
+  }
+</code>
+
+        <p class='slide'>...and account for lame IE 6/7(see jQueryUI's .ui-helper-clearfix styling for a more...'detailed' approach)</p>
+        <em class='slide'>If you know what I mean ;)</em>
+      </li>
+      <li class='slide'>You can also use any declaration that creates a new block formatting context(or 'flow root'), like overflow with a value other than visible, to make adjacent elements stack 'seprately'.</li>
+      <li class='slide'>Additionaly, elements that establish new block formatting contexts themselves calculate their height with floated children in mind(THINK OF THE CHILDREN).</li>
+    </ul>
+
+    <img class='slide' src='img/think_of_the_children.jpg' alt='' />
+  </section>
+
+  <section class='slide'>
+    <h2>position</h2>
+
+    <p class='slide'>As with <strong>float</strong>, this determines the positioning scheme of an element(how the position of its box is calculated).</p>
+
+    <ul>
+      <li class='slide'>A value of <strong>static</strong>(the initial value) means the box is laid out in normal document flow. Nothing special here.</li>
+      <li class='slide'><strong>relative</strong> allows an element to be offset, but still in normal flow. Other elements can be positioned around it as if it weren't offset. This value also has implications for absolutely positioned children...</li>
+      <li class='slide'><strong>absolute</strong>-positioned elements are taken completely out of normal flow and are positioned relative to their containing block<sup>1</sup> <sup>2</sup>.</li>
+    </ul>
+
+    <p class='slide'><sup>1</sup> The containing block for a <strong>positioned box</strong> is the nearest positioned ancestor or the root element.</p>
+    <p class='slide'><sup>2</sup> It goes without saying that position: absolute can be leveraged coolfully(IT'S A WORD) in situations where you don't want that element affecting the layout(e.g. help icons on amex)</p>
+  </section>
+
+  <section class='slide'>
+    <h2>vertical-align &amp; line-height</h2>
+
+    <p class='slide'>The former is possibly the single most often misunderstood property in all of CSS(srsly):</p>
+
+    <img class='slide' src='img/its_a_trap.jpg' alt='' />
+
+    <ul>
+      <li class='slide'>First of all, it can accomplish two different things depending on the context(table cell or not), but we'll be focusing on the latter context.</li>
+      <li class='slide'>The layout changes do <strong>not</strong> apply to the content(in this context), but the element itself.</li>
+      <li class='slide'>By default, [inline] boxes will line up 'on' the <strong>baseline</strong>.</li>
+      <li class='slide'>You can manipulate how elements are vertically aligned in respect to the <strong>strut</strong>(line box's baseline) with vertical-align.</li>
+    </ul>
+
+    <h3 class='slide'>line-height</h3>
+
+    <del class='slide'>Sets the [minimum] height of lineboxes with in an element(if block-level) or the height used to calculate the line box height(if inline, non-replaced).</del>
+
+    <p class='slide'>Basically, sets of the height of lines within an element :|</p>
+  </section>
+
+  <section class='slide'>
+    <h2>Horizontal Alignment</h2>
+
+    <ul>
+      <li class='slide'>text-align</li>
+      <li class='slide'>Automatic margins</li>
+      <li class='slide'>Absolute positioning and margin</li>
+    </ul>
+  </section>
+
+  <section class='slide'>
+    <h2>Vertical Alignment</h2>
+
+    <ul>
+      <li class='slide'>vertical-align</li>
+      <li class='slide'>height &amp; line-height</li>
+      <li class='slide'>Absolute positioning and margin</li>
+    </ul>
+  </section>
+
+  <section class='slide'>
+    <h2>Useful Resources</h2>
+
+    <ul>
+      <li><a href='http://reference.sitepoint.com/css/csslayout'>SitePoint layout articles</a></li>
+      <li><a href='http://www.quirksmode.org/css/contents.html'>QuirksMode compatability table</a></li>
+      <li><a href='https://developer.mozilla.org/en-US/docs/CSS/Visual_formatting_model'>MDN visual formatting model writeup</a></li>
+      <li><a href='http://www.w3.org/TR/CSS2/visuren.html'>The actual [2.1] visual formatting model spec</a></li>
+    </ul>
+  </section>
+
+  <script type='text/javascript'>
+    $.deck('.slide');
+  </script>
+</div>
+</body>
+</html>
